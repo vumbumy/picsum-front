@@ -1,0 +1,58 @@
+<template>
+  <div v-if="isEmpty" class="overlay-box">
+    <div class="spinner-border" style="width: 4rem; height: 4rem;" role="status"/>
+  </div>
+  <div v-else>
+    <div class="row justify-content-around mx-1">
+      <image-card v-for="image in imageList"
+                  :key="image.id"
+
+                  :image="image"/>
+    </div>
+    <b-button class="col-12"
+              squared
+              variant="primary"
+              size="lg"
+              :disabled="isLoading"
+              @click="loadImageList()"
+    >
+      {{isLoading ? "Loading..." : "Load More"}}
+    </b-button>
+  </div>
+</template>
+
+<script>
+import store from '@/store';
+import ImageCard from "@/component/ImageCard";
+
+export default {
+  components: {ImageCard},
+  computed: {
+    isLoading: () => store.state.image.loading,
+    imageList: () => store.state.image.list,
+    isEmpty: () => store.state.image.list.length === 0
+  },
+  setup () {
+    let page = 1
+
+    const loadImageList = () => store.dispatch("image/getImageList", {page: page++, limit: 36})
+
+    loadImageList()
+
+    return {
+      loadImageList
+    }
+  },
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  .overlay-box {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    z-index: 1000;
+  }
+</style>

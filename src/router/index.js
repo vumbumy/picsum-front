@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/components/HelloWorld'), // 동적 import
+    component: () => import('@/page/HomePage'), // 동적 import
   }
 ];
 
