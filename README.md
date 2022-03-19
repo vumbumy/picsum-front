@@ -1,4 +1,6 @@
-# hello-vue3
+# Picsum Front
+
+> A Flitto project
 
 ## Project setup
 ```
