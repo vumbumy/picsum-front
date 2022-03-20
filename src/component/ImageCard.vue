@@ -1,14 +1,15 @@
 <template>
-  <b-overlay :show="!loaded"
-             class="col-12 col-md-6 col-lg-4 col-xl-3 p-2">
-    <b-card class="border shadow" :header="'#' + image.id" img-top>
+  <b-overlay :show="!loaded">
+    <b-card class="border shadow" img-top :header="'#' + image.id">
       <div class="pb-3">
-        <b-card-img @load="loaded=true"
-                    :src="getThumbnailImgSrc(image.id)"
+        <b-card-img :src="getThumbnailImgSrc(image.id)"
                     :alt="image.id"
                     :hidden="!loaded"
+
+                    @click="onClickImage()"
+                    @load="loaded=true"
         />
-        <div v-if="!loaded" class="loading-box" />
+        <div class="loading-box" v-if="!loaded"/>
       </div>
 
       <b-card-text>
@@ -27,13 +28,16 @@
         <dl class="row justify-content-between">
           <dt class="col-5">More Info</dt>
           <dd class="col-7 text-end">
-            <a style="text-align: right" :href="image.url">...</a>
+            <a style="text-align: right" target="_blank" :href="image.url">...</a>
           </dd>
         </dl>
       </b-card-text>
 
       <div class="row">
-        <b-button class="col-12" @click="downloadImage(image)" variant="outline-primary">
+        <b-button class="col-12" variant="outline-primary"
+
+                  @click="downloadImage(image)"
+        >
           Free <bootstrap-icon icon="cloud-download"/>
         </b-button>
       </div>
@@ -49,6 +53,7 @@ export default {
   props: {
     image: Object
   },
+  emits: ['clickimage'],
   data() {
     return {
       loaded: false,
@@ -57,7 +62,10 @@ export default {
   methods: {
     getThumbnailImgSrc: (id) => getThumbnailPath(id),
     downloadImage: (image) => downloadImage(image),
-    log: (msg) => console.log(msg)
+
+    onClickImage() {
+      this.$emit('clickimage', this.image)
+    }
   }
 }
 </script>
@@ -66,6 +74,6 @@ export default {
   .loading-box {
     background-color: gray;
     width: 100%;
-    padding-top: 50%; /* 16:9 Aspect Ratio */
+    padding-top: 50%;
   }
 </style>
